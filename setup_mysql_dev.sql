@@ -1,4 +1,4 @@
--- To prepare MySQL server for HBNB project
+-- To setup MySQL server for HBNB project
 
 CREATE DATABASE IF NOT EXISTS hbnb_dev_db;
 CREATE USER IF NOT EXISTS 'hbnb_dev'@'localhost' IDENTIFIED BY 'hbnb_dev_pwd';
