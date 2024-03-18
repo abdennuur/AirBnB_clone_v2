@@ -34,11 +34,11 @@ class BaseModel:
         self.id = str(uuid4())
         self.created_at = self.updated_at = datetime.utcnow()
         if kwargs:
-            for ky, val in kwargs.items():
-                if ky == "created_at" or ky == "updated_at":
+            for key, val in kwargs.items():
+                if key == "created_at" or key == "updated_at":
                     val = datetime.strptime(val, "%Y-%m-%dT%H:%M:%S.%f")
-                if ky != "__class__":
-                    setattr(self, ky, val)
+                if key != "__class__":
+                    setattr(self, key, val)
 
     def save(self):
         """To update updated_at with current datetime"""
