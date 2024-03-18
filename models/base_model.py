@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""To define BaseModel class"""
+"""define BaseModel class"""
 import models
 from uuid import uuid4
 from datetime import datetime
@@ -12,12 +12,12 @@ Base = declarative_base()
 
 
 class BaseModel:
-    """ To define BaseModel class
+    """defines BaseModel class.
 
     Attributes:
         id (sqlalchemy String): BaseModel id.
-        created_at (sqlalchemy DateTime): datetime at creation
-        updated_at (sqlalchemy DateTime): datetime at last update
+        created_at (sqlalchemy DateTime): datetime at creation.
+        updated_at (sqlalchemy DateTime): datetime of last update.
     """
 
     id = Column(String(60), primary_key=True, nullable=False)
@@ -25,7 +25,7 @@ class BaseModel:
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
-        """ To initialize new BaseModel
+        """To initialize new BaseModel
 
         Args:
             *args (any): unused
@@ -34,22 +34,22 @@ class BaseModel:
         self.id = str(uuid4())
         self.created_at = self.updated_at = datetime.utcnow()
         if kwargs:
-            for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
-                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                if key != "__class__":
-                    setattr(self, key, value)
+            for ky, val in kwargs.items():
+                if ky == "created_at" or ky == "updated_at":
+                    val = datetime.strptime(val, "%Y-%m-%dT%H:%M:%S.%f")
+                if ky != "__class__":
+                    setattr(self, ky, val)
 
     def save(self):
-        """Update updated_at with current datetime"""
+        """To update updated_at with current datetime"""
         self.updated_at = datetime.utcnow()
         models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
-        """Return -> dictionary representation of BaseModel instance
+        """Return -> dictionary representation of BaseModel instance.
 
-        Includes key/value pair __class__ representing
+        Include key/value pair __class__ representing
         class name of object
         """
         my_dct = self.__dict__.copy()
@@ -60,7 +60,7 @@ class BaseModel:
         return my_dct
 
     def delete(self):
-        """ To delete current instance frm storage"""
+        """To delete current instance frm storage"""
         models.storage.delete(self)
 
     def __str__(self):
