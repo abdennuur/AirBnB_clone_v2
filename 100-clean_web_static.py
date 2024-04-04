@@ -1,34 +1,28 @@
 #!/usr/bin/python3
-"""the web server distribution"""
+# Fabfile 2 delete out-of-date archives
+import os
 from fabric.api import *
-from fabric.state import commands, connections
-import os.path
 
-env.user = 'ubuntu'
-env.hosts = ["54.227.197.165", "35.174.200.96"]
-env.key_filename = "~/id_rsa"
+env.hosts = ["54.160.85.72", "35.175.132.106"]
 
 
 def do_clean(number=0):
-    """deletes out-of-date archives"""
-    local('ls -t ~/AirBnB_Clone_V2/versions/').split()
+    """Delete out-of-date archive
+    Args:
+        number (int): number of archives to keep
+    If number 0 or 1, keep only most recent archive. If
+    nber is 2, keep the most and second-most recent archives,
+    etc.
+    """
+    number = 1 if int(number) == 0 else int(number)
+
+    archive = sorted(os.listdir("versions"))
+    [archive.pop() for ix in range(number)]
+    with lcd("versions"):
+        [local("rm ./{}".format(a)) for a in archive]
+
     with cd("/data/web_static/releases"):
-        target_R = sudo("ls -t .").split()
-    paths = "/data/web_static/releases"
-    nbr = int(nbr)
-    if nbr == 0:
-        num = 1
-    else:
-        num = nbr
-    if len(target_R) > 0:
-        if len(target) == nbr or len(target) == 0:
-            pass
-        else:
-            clr = target[num:]
-            for ix in range(len(clr)):
-                local('rm -f ~/AirBnB_Clone_V2/versions/{}'.format(target[-1]))
-        rem = target_R[num:]
-        for ji in range(len(rem)):
-            sudo('rm -rf {}/{}'.format(paths, rem[-1].strip(".tgz")))
-    else:
-        pass
+        archive = run("ls -tr").split()
+        archive = [a for a in archive if "web_static_" in a]
+        [archive.pop() for ix in range(number)]
+        [run("rm -rf ./{}".format(a)) for a in archive]
